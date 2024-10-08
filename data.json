@@ -1,0 +1,78 @@
+{
+    "subjects": [
+        {
+            "name": "Bases de Datos",
+            "id": 0
+        },
+        {
+            "name": "Lenguajes de Marcas y Sistemas de Gestión de Información",
+            "id": 1
+        },
+        {
+            "name": "Entornos de desasrrollo",
+            "id": 2
+        },
+        {
+            "name": "Itinerario Personal para la Empleabilidad I",
+            "id": 3
+        },
+        {
+            "name": "Inglés Profesional",
+            "id": 4
+        },
+        {
+            "name": "Digitalización Aplicada a los Sectores Productivos",
+            "id": 5
+        }
+    ],
+    "classes": [
+        {
+            "subject": 0,
+            "day": "1",
+            "from": "17:45",
+            "to": "18:40",
+            "url": "https://meet.google.com/roh-njck-oui",
+            "role": "DAW"
+        },
+        {
+            "subject": 1,
+            "day": "1",
+            "from": "18:40",
+            "to": "19:35",
+            "url": "https://meet.google.com/xsx-prpk-iqz",
+            "role": "DAW"
+        },
+        {
+            "subject": 2,
+            "day": "1",
+            "from": "19:35",
+            "to": "20:30",
+            "url": "https://meet.google.com/xsx-prpk-iqz",
+            "role": "DAW"
+        },
+        {
+            "subject": 3,
+            "day": "2",
+            "from": "16:25",
+            "to": "17:20",
+            "url": "https://meet.google.com/ibb-rhjy-bav",
+            "role": "DAW"
+        },
+        {
+            "subject": 4,
+            "day": "2",
+            "from": "17:45",
+            "to": "18:40",
+            "url": "https://meet.google.com/xfj-gzce-ibf",
+            "role": "DAW"
+        },
+        {
+            "subject": 5,
+            "day": "2",
+            "from": "18:40",
+            "to": "19:35",
+            "url": "https://meet.google.com/sru-jbbu-fvw",
+            "role": "DAW"
+        }
+    ]
+}

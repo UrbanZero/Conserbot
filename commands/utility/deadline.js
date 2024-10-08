@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { subjects } = require('../../config.json');
+const { subjects } = require('../../data.json');
 const deadlines = require('../../models/deadlines');
 
 module.exports = {

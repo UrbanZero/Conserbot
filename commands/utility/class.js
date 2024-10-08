@@ -1,11 +1,13 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { subjects, roles, classes, author } = require('../../config.json');
+const { author } = require('../../config.json');
+const { subjects, classes } = require('../../data.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('class')
         .setDescription('Devuelve tu clase actual o próxima en base a tu rol de grado.'),
     async execute(interaction) {
+        const roles = [{ "name": "DAW", "id": DAWid }, { "name": "DAM", "id": DAMid }]
         const now = new Date();//2024, 9, 7, 18, 15 TEST
         const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         let nextClass = null;

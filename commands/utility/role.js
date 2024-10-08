@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { roles } = require('../../config.json');
+const { DAWid, DAMid } = require('../../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,6 +26,7 @@ module.exports = {
 						.setRequired(true))
 		),
 	async execute(interaction) {
+		const roles = [{ "name": "DAW", "id": DAWid }, { "name": "DAM", "id": DAMid }]
 		const role = interaction.options.getRole('role')
 		if (!role) {
 			await interaction.reply(`ERROR Rol no especificado`);
