@@ -17,7 +17,7 @@ const askGpt = async function (prompt) {
                     content: prompt
                 }
             ],
-            max_tokens: 500
+            max_tokens: 400
         });
 
         const message = response.choices[0].message.content;
@@ -52,5 +52,5 @@ module.exports = askGpt;
 
 // Example usage
 //const userPrompt = "Qué es un div?";
-teacher("Eres un profesor de un grado Desarrollo de Aplicaciones que da respuestas tecnicas y claras.");
+//teacher("Eres un profesor de un grado Desarrollo de Aplicaciones que da respuestas tecnicas y claras.");
 //gptResponse(userPrompt);
