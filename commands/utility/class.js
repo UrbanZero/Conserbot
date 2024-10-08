@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { author } = require('../../config.json');
+require('dotenv').config();
 const { subjects, classes } = require('../../data.json');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
         .setName('class')
         .setDescription('Devuelve tu clase actual o próxima en base a tu rol de grado.'),
     async execute(interaction) {
-        const roles = [{ "name": "DAW", "id": DAWid }, { "name": "DAM", "id": DAMid }]
+        const roles = [{ "name": "DAW", "id": process.env.DAWid }, { "name": "DAM", "id": process.env.DAMid }]
         const now = new Date();//2024, 9, 7, 18, 15 TEST
         const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         let nextClass = null;
@@ -17,7 +17,7 @@ module.exports = {
             if (interaction.member.roles.cache.some(r => r.id === degree.id)) {
                 //Temporal
                 if (degree.name == "DAM") {
-                    await tempMsg(`El dueño de este bot no tiene las url meet de DAM, habla con <@${author}> para que las añada.`);
+                    await tempMsg(`El dueño de este bot no tiene las url meet de DAM, habla con <@${process.env.author}> para que las añada.`);
                     return
                 }
                 for (let i = 0; i < classes.length; i++) {

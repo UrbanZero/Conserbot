@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { DAWid, DAMid } = require('../../config.json');
+require('dotenv').config();
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,7 +26,7 @@ module.exports = {
 						.setRequired(true))
 		),
 	async execute(interaction) {
-		const roles = [{ "name": "DAW", "id": DAWid }, { "name": "DAM", "id": DAMid }]
+		const roles = [{ "name": "DAW", "id": process.env.DAWid }, { "name": "DAM", "id": process.env.DAMid }]
 		const role = interaction.options.getRole('role')
 		if (!role) {
 			await interaction.reply(`ERROR Rol no especificado`);

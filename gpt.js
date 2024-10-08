@@ -1,9 +1,9 @@
 const { OpenAI } = require("openai");
-const { gpt } = require('./config.json');
+require('dotenv').config();
 
 // Set up the configuration with your API key
 const openai = new OpenAI({
-    apiKey: gpt
+    apiKey: process.env.gpt
 });
 
 // Function to call GPT-4
