@@ -24,7 +24,7 @@ Recibe información de tu próxima clase.
 ```
 > Conserbot: La proxima clase de **DAW** es **Bases de Datos** y empeiza en 5 días, 17 horas y 15 minutos el **Lunes** a las **17:45**
 
-#Fechas
+##Fechas
 Infórmate de fechas de exámenes y tareas.
 ```
 /deadlines see
