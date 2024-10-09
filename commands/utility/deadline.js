@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { subjects } = require('../../data.json');
 const { pgClient } = require('../../utils/database');
+const { setTimezone } = require('../../utils/timezone');
 
 module.exports = {
     data: new SlashCommandBuilder()
