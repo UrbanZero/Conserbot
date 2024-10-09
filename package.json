@@ -1,12 +1,12 @@
 {
-  "name": "desabot",
+  "name": "conserbot",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Urban",
+  "author": "UrbanZero",
   "license": "ISC",
   "description": "",
   "dependencies": {

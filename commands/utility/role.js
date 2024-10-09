@@ -4,11 +4,11 @@ require('dotenv').config();
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('role')
-		.setDescription('Añade o elimina tu grado.')
+		.setDescription('Cambia o elimina tu grado.')
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('get')
-				.setDescription('añade')
+				.setDescription('cambia')
 				.addRoleOption(role =>
 					role
 						.setName('role')

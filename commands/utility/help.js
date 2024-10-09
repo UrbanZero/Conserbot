@@ -5,10 +5,10 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('Lista de comandos'),
+        .setDescription('Lista de comandos.'),
     async execute(interaction) {
         let str = "__Lista de comandos:__\n"
-        const isAdmin = interaction.guild.members.me.permissions.has(PermissionFlagsBits.Administrator)
+        const isAdmin = interaction.member.permissions.has(PermissionFlagsBits.Administrator)
         const foldersPath = path.join(__dirname, '..', '..', 'commands');
         const commandFolders = fs.readdirSync(foldersPath);
         for (const folder of commandFolders) {

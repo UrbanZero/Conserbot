@@ -13,6 +13,10 @@ const askGpt = async function (prompt) {
             model: "gpt-4o-mini",
             messages: [
                 {
+                    role: "system",
+                    content: "Eres Conserbot, un profesor de Desarrollo de Aplicaciones, da respuestas claras y concisas de menos de 1500 carácteres."
+                },
+                {
                     role: "user",
                     content: prompt
                 }
@@ -28,29 +32,7 @@ const askGpt = async function (prompt) {
     }
 }
 
-// Function to call GPT-4
-async function teacher(prompt) {
-    try {
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                {
-                    role: "system",
-                    content: prompt
-                }
-            ],
-        });
-
-        const message = response.choices[0].message.content;
-        console.log("GPT-4 Response:", message);
-    } catch (error) {
-        console.error("Error fetching response from GPT-4:", error);
-    }
-}
-
 module.exports = askGpt;
 
 // Example usage
-//const userPrompt = "Qué es un div?";
-//teacher("Eres un profesor de un grado Desarrollo de Aplicaciones que da respuestas tecnicas y claras.");
 //gptResponse(userPrompt);

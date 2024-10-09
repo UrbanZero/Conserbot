@@ -5,7 +5,7 @@ const deadlines = require('../../models/deadlines');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('deadline')
-        .setDescription('deadlines de trabajos')
+        .setDescription('deadlines de trabajos.')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('add')
