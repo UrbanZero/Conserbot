@@ -1,5 +1,6 @@
 # Conserbot
 [![Static Badge](https://img.shields.io/badge/discord.js-14.16.3-blue?link=https%3A%2F%2Fdiscord.js.org%2F)](https://discord.js.org)
+
 Bot oficial del servidor de Discord de la Conservera.
 
 ## Conserbot puede:
@@ -9,7 +10,7 @@ Bot oficial del servidor de Discord de la Conservera.
 - [ ] [**Hacer exámenes por ti**](#Hacer-exámenes-por-ti)
 
 ## Asignar roles
-Consigue el rol de tu grado (DAW/DAM)
+Consigue el rol de tu grado (DAW/DAM).
 ```
 /role get @role
 ```
