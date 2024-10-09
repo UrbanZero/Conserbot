@@ -25,6 +25,7 @@ for (const folder of commandFolders) {
 }
 
 // Construct and prepare an instance of the REST module
+//realToken token
 const rest = new REST().setToken(process.env.token);
 
 // and deploy your commands!
@@ -33,7 +34,7 @@ const rest = new REST().setToken(process.env.token);
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 		// The put method is used to fully refresh all commands in the guild with the current set
-		const data = await rest.put(
+		const data = await rest.put(//realClientId clientId
 			Routes.applicationGuildCommands(process.env.clientId, process.env.guildId), //Routes.applicationCommands(clientId),
 			{ body: commands },
 		);
