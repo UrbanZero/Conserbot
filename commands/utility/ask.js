@@ -35,7 +35,7 @@ module.exports = {
         const question = interaction.options.get('question').value
         await interaction.deferReply();
         const answer = await askGpt(question)
-        await interaction.editReply(`**Pregunta:**\n${question}\n**Respuesta:**\n${answer}`);
+        await interaction.editReply(`**Pregunta:** ${question}\n**Respuesta:**\n${answer}`);
 
         async function tempMsg(str) {
             await interaction.reply({
