@@ -29,18 +29,18 @@ module.exports = {
 		const roles = [{ "name": "DAW", "id": process.env.DAWid }, { "name": "DAM", "id": process.env.DAMid }]
 		const role = interaction.options.getRole('role')
 		if (!role) {
-			await interaction.reply(`ERROR Rol no especificado`);
+			tempMsg(`ERROR Rol no especificado`);
 			return;
 		}
 		// DAW DAM roles
 		if (!roles.some(r => r.id === role.id)) {
-			await interaction.reply(`ERROR No tienes acceso a ese rol`);
+			tempMsg(`ERROR No tienes acceso a ese rol`);
 			return;
 		}
 		// Get
 		if (interaction.options.getSubcommand() === 'get') {
 			if (interaction.member.roles.cache.some(r => r.id === role.id)) {
-				await interaction.reply(`ERROR <@${interaction.user.id}> ya está estudiando **${role.name}**`);//<@&${role.id}>
+				tempMsg(`ERROR <@${interaction.user.id}> ya está estudiando **${role.name}**`);//<@&${role.id}>
 			} else {
 				// Remove other degree roles
 				let extra = ""
@@ -61,8 +61,14 @@ module.exports = {
 				interaction.member.roles.remove(role);
 				await interaction.reply(`<@${interaction.user.id}> dejó de estudiar **${role.name}**`);
 			} else {
-				await interaction.reply(`ERROR <@${interaction.user.id}> no está estudiando **${role.name}**`);
+				tempMsg(`ERROR <@${interaction.user.id}> no está estudiando **${role.name}**`);
 			}
+		}
+		async function tempMsg(str) {
+			await interaction.reply({
+				content: str,
+				ephemeral: true,
+			});
 		}
 	},
 };

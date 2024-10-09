@@ -9,7 +9,7 @@ module.exports = {
         .setDescription('Devuelve tu clase actual o próxima en base a tu rol de grado.'),
     async execute(interaction) {
         const roles = [{ "name": "DAW", "id": process.env.DAWid }, { "name": "DAM", "id": process.env.DAMid }]
-        const now = setTimezone(new Date());//2024, 9, 7, 18, 15 TEST
+        const now = setTimezone(new Date()); // 2024, 9, 7, 18, 15 TEST
         const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         let nextClass = null;
 
