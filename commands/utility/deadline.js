@@ -53,9 +53,7 @@ module.exports = {
         if (interaction.options.getSubcommand() === 'see') {
             try {
                 const selectQuery = `SELECT * FROM deadlines WHERE date > $1 ORDER BY date ASC`;
-                const date = new Date()
-                const now = date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' });
-                const selectResult = await pgClient.query(selectQuery, [now]);
+                const selectResult = await pgClient.query(selectQuery, [new Date()]);
                 let str = "__Deadlines:__\n"
                 for (let i = 0; i < selectResult.rows.length; i++) {
                     const row = selectResult.rows[i];
@@ -82,31 +80,27 @@ module.exports = {
             if (day > 31) return interaction.reply(`ERROR Dias mayores a 31.`);
             if (hour > 23) return interaction.reply(`ERROR Horas mayores a 23.`);
             if (mins > 59) return interaction.reply(`ERROR Minutos mayores a 59.`);
-            const date = new Date()
-            const now = date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' }); 
+            const now = new Date();
             let year = now.getFullYear()
             //In case of next year
             if (month < now.getMonth()) {
                 year = (Number(year) + 1).toString()
             }
             console.log(year)
-            const date2 = new Date(year, month, day, hour, mins);
-            const then = date2.toLocaleString('en-US', { timeZone: 'Europe/Madrid' }); 
+            const then = new Date(year, month, day, hour, mins);
             let sub
             for (let i = 0; i < subjects.length; i++) {
                 const s = subjects[i]; if (s.id == id) sub = s
             }
             try {
                 const selectQuery = `SELECT * FROM deadlines WHERE name = $1 AND subject = $2 AND date > $3`;
-                const date = new Date()
-                const now = date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' }); 
-                const duplicated = await pgClient.query(selectQuery, [name, id, now]);
+                const duplicated = await pgClient.query(selectQuery, [name, id, new Date()]);
                 console.log(duplicated.rows)
                 if (duplicated.rows.length != 0) {
                     return interaction.reply(`${sub.name} ya tiene una deadline con el nombre ${name}.`);
                 }
                 const insertQuery = `INSERT INTO deadlines (name, subject, date, created_at) VALUES ($1, $2, $3, $4)`;
-                await pgClient.query(insertQuery, [name, id, then, now]);
+                await pgClient.query(insertQuery, [name, id, then, new Date()]);
                 return interaction.reply(`Deadline ${name} de ${sub.name} añadida para el ${year}-${dateString}.`);
             } catch (error) {
                 console.log(error)
@@ -122,9 +116,7 @@ module.exports = {
             }
             try {
                 const deleteQuery = `DELETE FROM deadlines WHERE name = $1 AND subject = $2 AND date > $3`;
-                const date = new Date(year, month, day, hour, mins);
-                const now = date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' });
-                await pgClient.query(deleteQuery, [name, id, now]);
+                await pgClient.query(deleteQuery, [name, id, new Date()]);
                 return interaction.reply(`Deadline ${name} de ${sub.name} eliminada.`);
             } catch (error) {
                 console.log(error)

@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 require('dotenv').config();
 const { subjects, classes } = require('../../data.json');
+const { setTimezone } = require('../../utils/timezone');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,8 +9,7 @@ module.exports = {
         .setDescription('Devuelve tu clase actual o próxima en base a tu rol de grado.'),
     async execute(interaction) {
         const roles = [{ "name": "DAW", "id": process.env.DAWid }, { "name": "DAM", "id": process.env.DAMid }]
-        const date = new Date()
-        const now = date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' });
+        const now = setTimezone(new Date());//2024, 9, 7, 18, 15 TEST
         const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         let nextClass = null;
 
@@ -64,10 +64,10 @@ module.exports = {
         }
 
         // Helper function to parse time strings into Date objects
-        function parseTime(timeString, classDay, now1) {
+        function parseTime(timeString, classDay, now) {
             const [hours, minutes] = timeString.split(':').map(Number);
-            const date = new Date(now1)
-            const now = date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' });
+            const date = setTimezone(new Date(now));
+
             // Calculate the difference in days, ensuring no extra days are added
             let diffDays = classDay - now.getDay();
             if (diffDays < 0) {

@@ -13,8 +13,7 @@ module.exports = {
                 .setMaxLength(200)
                 .setRequired(true)),
     async execute(interaction) {
-        const date = new Date()
-        const now = date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' });
+        const now = new Date()
 
         const selectQuery = `SELECT created_at FROM questions WHERE name = $1 ORDER BY created_at DESC LIMIT 1`;
         const consult = await pgClient.query(selectQuery, [interaction.user.username]);
@@ -27,9 +26,7 @@ module.exports = {
         }
         try {
             const insertQuery = `INSERT INTO questions (name, created_at) VALUES ($1, $2)`;
-            const date = new Date()
-            const now = date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' });
-            await pgClient.query(insertQuery, [interaction.user.username, now]);
+            await pgClient.query(insertQuery, [interaction.user.username, new Date()]);
         } catch (error) {
             console.log(error)
             return interaction.reply(`ERROR AL AÑADIR A LA BASE DE DATOS.${error.name}`);
