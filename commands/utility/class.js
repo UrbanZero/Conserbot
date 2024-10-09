@@ -45,6 +45,10 @@ module.exports = {
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             var dayName = dayNames[nextClass._class.day];
+            console.log(diff)
+            console.log(days)
+            console.log(hours)
+            console.log(minutes)
             if (hours == 0) {
                 await tempMsg(`La proxima clase de **${nextClass.degree.name}** es **${getSubjectName(nextClass._class.subject)}** y empeiza en **${minutes} minutos** el **${dayName}** a las **${nextClass._class.from}**\nMeet: ${nextClass._class.url} `);
                 return

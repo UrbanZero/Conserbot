@@ -59,6 +59,9 @@ module.exports = {
                     const row = selectResult.rows[i];
                     str += `**${row.name}** de ${subjects.filter((s) => s.id == row.subject)[0].name} el ${row.date.getMonth() + 1}/${row.date.getDate()} a las ${row.date.getHours()}:${row.date.getMinutes()}\n`
                 }
+                if (selectResult.rows.length == 0) {
+                    str += `No hay deadlines en curso.`
+                }
                 return interaction.reply(str);
             } catch (error) {
                 console.log(error)

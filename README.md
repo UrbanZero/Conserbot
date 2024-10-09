@@ -7,7 +7,7 @@ Bot oficial del servidor de Discord de la Conservera.
 - [x] [**Asignar roles**](#Roles)
 - [x] [**Horarios de clases**](#Horarios)
 - [x] [**Fechas de exámenes y tareas**](#Fechas)
-- [x] [**Dar respuestas técnicas a cualquier pregunta**](#Respuestas)
+- [x] [**Respuestas técnicas a cualquier pregunta**](#Respuestas)
 - [ ] [**Hacer exámenes por ti**](#Exámenes)
 
 ## Roles
