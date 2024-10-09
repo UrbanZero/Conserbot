@@ -12,7 +12,7 @@ Bot oficial del servidor de Discord de la Conservera.
 ## Asignar roles
 Consigue el rol de tu grado (DAW/DAM).
 ```
-/role get @role
+/role get @rol
 ```
 > Conserbot: **@Tú** está estudiando **@rol**
 

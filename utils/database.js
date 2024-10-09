@@ -1,12 +1,12 @@
-const Sequelize = require('sequelize');
+const { Client: PgClient } = require('pg');
 
-//DB
-const sequelize = new Sequelize('database', 'user', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    logging: false,
-    // SQLite only
-    storage: 'database.sqlite',
+// Initialize PostgreSQL client
+const pgClient = new PgClient({
+    host: process.env.PGHOST,
+    user: process.env.PGUSER,
+    port: process.env.PGPORT,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB
 });
 
-module.exports = sequelize;
+module.exports = { pgClient }

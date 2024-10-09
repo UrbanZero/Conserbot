@@ -1,11 +1,15 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { subjects } = require('../../data.json');
-const deadlines = require('../../models/deadlines');
+const { pgClient } = require('../../utils/database');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('deadline')
+        .setName('deadlines')
         .setDescription('deadlines de trabajos.')
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('see')
+                .setDescription('ver'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('add')
@@ -25,43 +29,95 @@ module.exports = {
                 })
                 .addStringOption(option =>
                     option.setName('date')
-                        .setDescription('MM-dd HH:mm')
-                        .setRequired(true))
+                        .setDescription('dd-MM HH:mm')
+                        .setRequired(true)))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('remove')
+                .setDescription('eliminar')
+                .addStringOption(option =>
+                    option.setName('name')
+                        .setRequired(true)
+                        .setDescription('nombre de la deadline'))
+                .addStringOption(option => {
+                    option.setName('subject')
+                        .setDescription('asignatura')
+                        .setRequired(true)
+                    for (let subject of subjects) {
+                        option.addChoices({ name: subject.name, value: subject.id.toString() })
+                    }
+                    return option
+                })
         ).setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
-        const name = interaction.options.get('name').value
-        const id = Number(interaction.options.get('subject').value)
-        const dateString = interaction.options.get('date').value
-        const [dayMonth, hourMins] = dateString.split(' ')
-        const [month, day] = dayMonth.split('-')
-        const [hour, mins] = hourMins.split(':')
-        const now = new Date();
-        let year = now.getFullYear()
-        //In case of next year
-        if (month > now.getMonth()) {
-            year = (Number(year) + 1).toString()
-        }
-        const then = new Date(year, month, day, hour, mins);
-        let sub
-        for (let i = 0; i < subjects.length; i++) {
-            const s = subjects[i]; if (s.id == id) sub = s
-        }
-        if (interaction.options.getSubcommand() === 'add') {
+        if (interaction.options.getSubcommand() === 'see') {
             try {
-                // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-                const deadline = await deadlines.create({
-                    name: name,
-                    subject: id,
-                    date: then,
-                });
-                return interaction.reply(`Deadline ${deadline.name} de ${sub.name} añadida para el ${year + "-" + dateString}.`);
-            }
-            catch (error) {
-                if (error.name === 'SequelizeUniqueConstraintError') {
-                    return interaction.reply('That deadline already exists.');
+                const selectQuery = `SELECT * FROM deadlines WHERE date > $1 ORDER BY date ASC`;
+                const selectResult = await pgClient.query(selectQuery, [new Date()]);
+                let str = "__Deadlines:__\n"
+                for (let i = 0; i < selectResult.rows.length; i++) {
+                    const row = selectResult.rows[i];
+                    str += `**${row.name}** de ${subjects.filter((s) => s.id == row.subject)[0].name} el ${row.date.getMonth() + 1}/${row.date.getDate()} a las ${row.date.getHours()}:${row.date.getMinutes()}\n`
                 }
+                return interaction.reply(str);
+            } catch (error) {
                 console.log(error)
-                return interaction.reply(`Something went wrong with adding a deadline.${error.name}`);
+                return interaction.reply(`ERROR En la base de datos.${error.name}`);
+            }
+        }
+        else if (interaction.options.getSubcommand() === 'add') {
+            const name = interaction.options.get('name').value
+            const id = Number(interaction.options.get('subject').value)
+            const dateString = interaction.options.get('date').value
+            const [dayMonth, hourMins] = dateString.split(' ')
+            let [day, month] = dayMonth.split('-')
+            const [hour, mins] = hourMins.split(':')
+            month -= 1
+            if (month > 12) return interaction.reply(`ERROR Mes mayor a 12.`);
+            if (day > 31) return interaction.reply(`ERROR Dias mayores a 31.`);
+            if (hour > 23) return interaction.reply(`ERROR Horas mayores a 23.`);
+            if (mins > 59) return interaction.reply(`ERROR Minutos mayores a 59.`);
+            const now = new Date();
+            let year = now.getFullYear()
+            //In case of next year
+            if (month < now.getMonth()) {
+                year = (Number(year) + 1).toString()
+            }
+            console.log(year)
+            const then = new Date(year, month, day, hour, mins);
+            let sub
+            for (let i = 0; i < subjects.length; i++) {
+                const s = subjects[i]; if (s.id == id) sub = s
+            }
+            try {
+                const selectQuery = `SELECT * FROM deadlines WHERE name = $1 AND subject = $2 AND date > $3`;
+                const duplicated = await pgClient.query(selectQuery, [name, id, new Date()]);
+                console.log(duplicated.rows)
+                if (duplicated.rows.length != 0) {
+                    return interaction.reply(`${sub.name} ya tiene una deadline con el nombre ${name}.`);
+                }
+                const insertQuery = `INSERT INTO deadlines (name, subject, date, created_at) VALUES ($1, $2, $3, $4)`;
+                await pgClient.query(insertQuery, [name, id, then, new Date()]);
+                return interaction.reply(`Deadline ${name} de ${sub.name} añadida para el ${year}-${dateString}.`);
+            } catch (error) {
+                console.log(error)
+                return interaction.reply(`ERROR En la base de datos.${error.name}`);
+            }
+        }
+        else if (interaction.options.getSubcommand() === 'remove') {
+            const name = interaction.options.get('name').value
+            const id = Number(interaction.options.get('subject').value)
+            let sub
+            for (let i = 0; i < subjects.length; i++) {
+                const s = subjects[i]; if (s.id == id) sub = s
+            }
+            try {
+                const deleteQuery = `DELETE FROM deadlines WHERE name = $1 AND subject = $2 AND date > $3`;
+                await pgClient.query(deleteQuery, [name, id, new Date()]);
+                return interaction.reply(`Deadline ${name} de ${sub.name} eliminada.`);
+            } catch (error) {
+                console.log(error)
+                return interaction.reply(`ERROR En la base de datos.${error.name}`);
             }
         }
     },

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const gptdb = require('../../models/gpt');
+const { pgClient } = require('../../utils/database');
 const askGpt = require('../../gpt');
 
 module.exports = {
@@ -14,28 +14,20 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         const now = new Date()
-        const user = await gptdb.findAll({
-            limit: 1,
-            where: { user: interaction.user.username },
-            order: [['createdAt', 'ASC']],
-        });
-        if (user.length != 0) {
-            const last = user[0].get("createdAt")
-            const wait = last.getTime() + 20000 - now.getTime()
+
+        const selectQuery = `SELECT created_at FROM questions WHERE name = $1 ORDER BY created_at DESC LIMIT 1`;
+        const consult = await pgClient.query(selectQuery, [interaction.user.username]);
+        if (consult && consult.rows.length > 0) {
+            const wait = consult.rows[0].created_at.getTime() + 20000 - now.getTime()
             if (wait > 0) {
                 await tempMsg(`Tienes que esperar ${Math.ceil(wait / 1000)} segundos para preguntar de nuevo.`);
                 return
             }
         }
         try {
-            await gptdb.create({
-                user: interaction.user.username
-            });
-        }
-        catch (error) {
-            if (error.name === 'SequelizeUniqueConstraintError') {
-                return interaction.reply('ERROR EN LA BASE DE DATOS.');
-            }
+            const insertQuery = `INSERT INTO questions (name, created_at) VALUES ($1, $2)`;
+            await pgClient.query(insertQuery, [interaction.user.username, new Date()]);
+        } catch (error) {
             console.log(error)
             return interaction.reply(`ERROR AL AÑADIR A LA BASE DE DATOS.${error.name}`);
         }
@@ -43,7 +35,7 @@ module.exports = {
         const question = interaction.options.get('question').value
         await interaction.deferReply();
         const answer = await askGpt(question)
-        await interaction.editReply(`**Pregunta:**\n${question}\n\n**Respuesta:**\n${answer}`);
+        await interaction.editReply(`**Pregunta:**\n${question}\n**Respuesta:**\n${answer}`);
 
         async function tempMsg(str) {
             await interaction.reply({
